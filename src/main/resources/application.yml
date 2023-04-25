@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: local
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 38282507
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
