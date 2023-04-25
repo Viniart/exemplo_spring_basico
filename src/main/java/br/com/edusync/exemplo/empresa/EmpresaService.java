@@ -1,37 +1,43 @@
 package br.com.edusync.exemplo.empresa;
 
 import br.com.edusync.exemplo.empresa.EmpresaModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmpresaService {
 
-    List<EmpresaModel> listaEmpresas = new ArrayList<EmpresaModel>();
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
     public List<EmpresaModel> listarTodos() {
-        return listaEmpresas;
+        return empresaRepository.findAll();
     }
 
     public void cadastrarEmpresa(EmpresaModel pessoa) {
-        listaEmpresas.add(pessoa);
+        empresaRepository.save(pessoa);
     }
 
     public EmpresaModel buscarEmpresaPorCnpj(String cnpj) {
-        return listaEmpresas.stream().filter(p -> p.getCnpj().equals(cnpj)).findFirst().orElseThrow();
+        Optional<EmpresaModel> empresa = empresaRepository.findById(cnpj);
+
+        if(empresa.isEmpty()) {
+            return null;
+        }
+        return empresa.get();
     }
 
-    public void deletarEmpresa(String cpf) {
-        EmpresaModel empresa = buscarEmpresaPorCnpj(cpf);
-        listaEmpresas.remove(empresa);
+    public void deletarEmpresa(String cnpj) {
+        if(empresaRepository.existsById(cnpj))
+            empresaRepository.deleteById(cnpj);
     }
 
-    public void editarEmpresa(String cnpj, EmpresaModel empresaNova) {
-        EmpresaModel empresaAntiga = buscarEmpresaPorCnpj(cnpj);
-
-        listaEmpresas.remove(empresaAntiga);
-        listaEmpresas.add(empresaNova);
+    public void editarEmpresa(String cnpj, EmpresaModel empresa) {
+        if(empresaRepository.existsById(cnpj))
+            empresaRepository.save(empresa);
     }
 }
