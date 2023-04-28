@@ -1,5 +1,7 @@
 package br.com.edusync.exemplo.pessoa;
 
+import br.com.edusync.exemplo.empresa.EmpresaModel;
+import br.com.edusync.exemplo.empresa.EmpresaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ public class PessoaController {
     // com anotação @Service, @Beans, etc
     @Autowired
     private PessoaService service;
+    @Autowired
+    private EmpresaService empresaService;
 
     // Get - Trazer, Post - Cadastrar, Put - Editar, Patch - Editar, Delete - Deletar
     @GetMapping(value = "/pessoas")
@@ -34,7 +38,11 @@ public class PessoaController {
             responseCode = "201",
             description = "Cadastro bem sucedido!"
     )
-    public ResponseEntity cadastrarPessoa(@RequestBody PessoaModel pessoa) {
+    public ResponseEntity cadastrarPessoa(@RequestBody PessoaModel pessoa, @RequestParam String cnpjEmpresa) {
+
+        EmpresaModel empresa = empresaService.buscarEmpresaPorCnpj(cnpjEmpresa);
+
+        pessoa.setEmpresa(empresa);
 
         service.cadastrarPessoa(pessoa);
         return new ResponseEntity("Cadastrado com Sucesso!", HttpStatus.CREATED);
