@@ -4,6 +4,7 @@ import br.com.edusync.exemplo.empresa.EmpresaModel;
 import br.com.edusync.exemplo.empresa.EmpresaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +25,13 @@ public class PessoaController {
 
     // Get - Trazer, Post - Cadastrar, Put - Editar, Patch - Editar, Delete - Deletar
     @GetMapping(value = "/pessoas")
-    @Operation(summary = "Retorna a lista de pessoas", description = "Método que acessa o método listarTodos do service para exibir a lista de pessoas")
+    @Operation(summary = "Retorna a lista de pessoas", description = "Método que acessa o método listarTodos do service para exibir a lista de pessoas",
+            security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(
             responseCode = "200",
             description = "Sucesso"
     )
+
     public ResponseEntity listarPessoas() {
         return new ResponseEntity(service.listarTodos(), HttpStatus.OK);
     }

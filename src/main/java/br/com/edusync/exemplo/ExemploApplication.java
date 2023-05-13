@@ -4,9 +4,11 @@ import br.com.edusync.exemplo.storage.StorageService;
 import br.com.edusync.exemplo.storage.StorageProperties;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +20,12 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
 // Anotação do SpringDoc de informações base do seu projeto
+@SecurityScheme(
+		name = "bearerAuth",
+		type = SecuritySchemeType.HTTP,
+		bearerFormat = "JWT",
+		scheme = "bearer"
+)
 @OpenAPIDefinition(
 		info = @Info(
 				title = "Documentação Teste",
