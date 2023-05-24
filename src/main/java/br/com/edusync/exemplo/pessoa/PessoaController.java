@@ -4,6 +4,7 @@ import br.com.edusync.exemplo.empresa.EmpresaModel;
 import br.com.edusync.exemplo.empresa.EmpresaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class PessoaController {
     @Autowired
     private PessoaService service;
     @Autowired
-    private EmpresaService empresaService;
+    private CadastrarPessoaFacadeImpl cadastrarPessoaFacade;
 
     // Get - Trazer, Post - Cadastrar, Put - Editar, Patch - Editar, Delete - Deletar
     @GetMapping(value = "/pessoas")
@@ -38,13 +39,10 @@ public class PessoaController {
             responseCode = "201",
             description = "Cadastro bem sucedido!"
     )
-    public ResponseEntity cadastrarPessoa(@RequestBody PessoaModel pessoa, @RequestParam String cnpjEmpresa) {
+    public ResponseEntity cadastrarPessoa(@Valid @RequestBody PessoaModel pessoa, @RequestParam String cnpj) {
 
-        EmpresaModel empresa = empresaService.buscarEmpresaPorCnpj(cnpjEmpresa);
+        cadastrarPessoaFacade.cadastrarPessoa(pessoa, cnpj);
 
-        pessoa.setEmpresa(empresa);
-
-        service.cadastrarPessoa(pessoa);
         return new ResponseEntity("Cadastrado com Sucesso!", HttpStatus.CREATED);
 
     }

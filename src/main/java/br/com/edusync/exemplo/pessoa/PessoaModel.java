@@ -3,11 +3,13 @@ package br.com.edusync.exemplo.pessoa;
 import br.com.edusync.exemplo.empresa.EmpresaModel;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.util.Date;
 
@@ -19,8 +21,14 @@ import java.util.Date;
 public class PessoaModel {
 
     @Id
+    @CPF
     private String cpf;
+    @NotNull
+    @Size(min = 3, max = 30, message
+            = "Nome deve ter pelo menos 3 caracteres")
     private String nome;
+    @NotNull
+    @Future
     private Date dataNascimento;
     private String rotaImagem;
     @ManyToOne(fetch = FetchType.LAZY)
